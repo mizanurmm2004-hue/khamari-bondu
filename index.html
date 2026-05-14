@@ -2,33 +2,60 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>খামারি বন্ধু প্রো - শুরু</title>
+    <title>খামারি বন্ধু প্রো - ২য় ধাপ</title>
     <style>
-        body { font-family: sans-serif; background: #f8fafc; padding: 20px; text-align: center; }
-        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .btn { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 10px; background: #10b981; color: white; cursor: pointer; }
+        :root { --primary: #2563eb; --warning: #f59e0b; --bg: #f8fafc; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        
+        /* নোটিফিকেশন বার */
+        .notification-bar {
+            background: #1e293b; color: #fbbf24; padding: 10px 0; overflow: hidden;
+            position: sticky; top: 0; z-index: 1000; font-weight: bold; border-bottom: 2px solid var(--warning);
+        }
+        .scrolling-text {
+            display: inline-block; white-space: nowrap; padding-left: 100%;
+            animation: scroll 15s linear infinite;
+        }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        .container { max-width: 480px; margin: 20px auto; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); padding: 25px; min-height: 80vh; }
+        .btn { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        .btn-green { background: #10b981; color: white; }
+        .btn-blue { background: #3b82f6; color: white; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
+
+<div class="notification-bar">
+    <div class="scrolling-text">খামারি বন্ধু অ্যাপে আপনাকে স্বাগতম! আজ আপনার সব কাজ সঠিক সময়ে শেষ করুন।</div>
+</div>
+
 <div class="container" id="app">
     <div id="homePage">
-        <h2>খামারি বন্ধু PRO</h2>
-        <p>খামারের ডিজিটাল যাত্রা শুরু হোক এখান থেকেই।</p>
-        <button class="btn" onclick="show('addPage')">নতুন প্রাণী যোগ করুন ➕</button>
+        <h2 style="color:var(--primary); text-align:center;">খামারি বন্ধু PRO</h2>
+        <button class="btn btn-green" onclick="show('addPage')">নতুন প্রাণী যোগ করুন ➕</button>
+        <button class="btn btn-blue" onclick="show('remPage')">রিমাইন্ডার ও নোট 🔔</button>
     </div>
+
     <div id="addPage" class="hidden">
-        <h3>প্রাণীর তথ্য দিন</h3>
-        <input type="text" placeholder="প্রাণীর ধরণ" style="width:90%; padding:10px; margin-bottom:10px;">
-        <button class="btn">সেভ করুন</button>
-        <button onclick="show('homePage')" style="background:none; border:none; color:gray; cursor:pointer;">পিছনে যান</button>
+        <h3>নতুন প্রাণী যোগ করুন</h3>
+        <input type="text" placeholder="প্রাণীর নাম/ধরণ" style="width:95%; padding:10px; margin-bottom:10px;">
+        <button class="btn btn-green">সেভ করুন</button>
+        <button onclick="show('homePage')" style="border:none; background:none; cursor:pointer; color:gray;">পিছনে যান</button>
+    </div>
+
+    <div id="remPage" class="hidden">
+        <h3>আজকের রিমাইন্ডার</h3>
+        <p style="text-align:center; color:gray;">কোনো রিমাইন্ডার সেট করা নেই।</p>
+        <button onclick="show('homePage')" class="btn">পিছনে যান</button>
     </div>
 </div>
+
 <script>
     function show(id) {
-        document.getElementById('homePage').classList.add('hidden');
-        document.getElementById('addPage').classList.add('hidden');
-        document.getElementById('app').querySelector('#'+id).classList.remove('hidden');
+        document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
     }
 </script>
 </body>
