@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>খামারি বন্ধু প্রো - শুরু</title>
+    <style>
+        body { font-family: sans-serif; background: #f8fafc; padding: 20px; text-align: center; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .btn { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 10px; background: #10b981; color: white; cursor: pointer; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div id="homePage">
+        <h2>খামারি বন্ধু PRO</h2>
+        <p>খামারের ডিজিটাল যাত্রা শুরু হোক এখান থেকেই।</p>
+        <button class="btn" onclick="show('addPage')">নতুন প্রাণী যোগ করুন ➕</button>
+    </div>
+    <div id="addPage" class="hidden">
+        <h3>প্রাণীর তথ্য দিন</h3>
+        <input type="text" placeholder="প্রাণীর ধরণ" style="width:90%; padding:10px; margin-bottom:10px;">
+        <button class="btn">সেভ করুন</button>
+        <button onclick="show('homePage')" style="background:none; border:none; color:gray; cursor:pointer;">পিছনে যান</button>
+    </div>
+</div>
+<script>
+    function show(id) {
+        document.getElementById('homePage').classList.add('hidden');
+        document.getElementById('addPage').classList.add('hidden');
+        document.getElementById('app').querySelector('#'+id).classList.remove('hidden');
+    }
+</script>
+</body>
+</html>
