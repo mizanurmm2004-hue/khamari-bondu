@@ -2,15 +2,15 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>খামারি বন্ধু প্রো - ২য় ধাপ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>খামারি বন্ধু প্রো - ৩য় ধাপ</title>
     <style>
-        :root { --primary: #2563eb; --warning: #f59e0b; --bg: #f8fafc; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        :root { --primary: #2563eb; --success: #10b981; --warning: #f59e0b; --bg: #f1f5f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         
-        /* নোটিফিকেশন বার */
         .notification-bar {
-            background: #1e293b; color: #fbbf24; padding: 10px 0; overflow: hidden;
-            position: sticky; top: 0; z-index: 1000; font-weight: bold; border-bottom: 2px solid var(--warning);
+            background: #1e293b; color: #fbbf24; padding: 12px 0; overflow: hidden;
+            position: sticky; top: 0; z-index: 1000; font-weight: bold; border-bottom: 3px solid var(--warning);
         }
         .scrolling-text {
             display: inline-block; white-space: nowrap; padding-left: 100%;
@@ -18,37 +18,61 @@
         }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        .container { max-width: 480px; margin: 20px auto; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); padding: 25px; min-height: 80vh; }
-        .btn { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
-        .btn-green { background: #10b981; color: white; }
-        .btn-blue { background: #3b82f6; color: white; }
+        .container { max-width: 480px; margin: 20px auto; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 25px; min-height: 80vh; }
+        .btn { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn-green { background: var(--success); color: white; }
+        .btn-blue { background: var(--primary); color: white; }
+        .btn-purple { background: #8b5cf6; color: white; }
+        
+        .input-group { margin-bottom: 15px; text-align: left; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        
+        .img-preview { width: 100%; height: 200px; border-radius: 12px; margin-top: 10px; object-fit: cover; border: 2px dashed #cbd5e1; display: none; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="notification-bar">
-    <div class="scrolling-text">খামারি বন্ধু অ্যাপে আপনাকে স্বাগতম! আজ আপনার সব কাজ সঠিক সময়ে শেষ করুন।</div>
+    <div class="scrolling-text">৩য় ধাপ আপডেট: এখন থেকে প্রাণীর ওজন এবং ছবি প্রিভিউ দেখা যাবে!</div>
 </div>
 
 <div class="container" id="app">
     <div id="homePage">
         <h2 style="color:var(--primary); text-align:center;">খামারি বন্ধু PRO</h2>
         <button class="btn btn-green" onclick="show('addPage')">নতুন প্রাণী যোগ করুন ➕</button>
+        <button class="btn btn-purple" onclick="show('weightPage')">ওজন আপডেট করুন ⚖️</button>
         <button class="btn btn-blue" onclick="show('remPage')">রিমাইন্ডার ও নোট 🔔</button>
     </div>
 
     <div id="addPage" class="hidden">
         <h3>নতুন প্রাণী যোগ করুন</h3>
-        <input type="text" placeholder="প্রাণীর নাম/ধরণ" style="width:95%; padding:10px; margin-bottom:10px;">
-        <button class="btn btn-green">সেভ করুন</button>
-        <button onclick="show('homePage')" style="border:none; background:none; cursor:pointer; color:gray;">পিছনে যান</button>
+        <div class="input-group">
+            <input type="text" id="animalType" placeholder="প্রাণীর ধরণ (যেমন: গরু, ছাগল)">
+        </div>
+        <button class="btn btn-green" onclick="alert('সেভ হয়েছে!')">সেভ করুন</button>
+        <button onclick="show('homePage')" style="border:none; background:none; cursor:pointer; color:gray; width:100%;">পিছনে যান</button>
+    </div>
+
+    <div id="weightPage" class="hidden">
+        <h3>ওজন ও ছবি আপডেট 📸</h3>
+        <div class="input-group">
+            <label>ছবি তুলুন:</label>
+            <input type="file" accept="image/*" capture="camera" id="cameraInput" onchange="previewImage(event)">
+        </div>
+        <img id="imagePreview" class="img-preview" src="">
+        
+        <div class="input-group" style="margin-top:15px;">
+            <input type="number" id="weightInput" placeholder="আজকের ওজন (কেজি)">
+        </div>
+        <button class="btn btn-purple" onclick="alert('ওজন আপডেট সফল!')">আপডেট করুন</button>
+        <button onclick="show('homePage')" style="border:none; background:none; cursor:pointer; color:gray; width:100%;">পিছনে যান</button>
     </div>
 
     <div id="remPage" class="hidden">
         <h3>আজকের রিমাইন্ডার</h3>
         <p style="text-align:center; color:gray;">কোনো রিমাইন্ডার সেট করা নেই।</p>
-        <button onclick="show('homePage')" class="btn">পিছনে যান</button>
+        <button onclick="show('homePage')" class="btn btn-blue">পিছনে যান</button>
     </div>
 </div>
 
@@ -56,6 +80,16 @@
     function show(id) {
         document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
+    }
+
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        }
+        reader.readAsDataURL(event.target.files[0]);
     }
 </script>
 </body>
