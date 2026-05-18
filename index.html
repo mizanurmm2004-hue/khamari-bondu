@@ -1,158 +1,624 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>খামারি বন্ধু PRO - ফাইনাল ভার্সন</title>
-    <style>
-        :root { --primary: #2563eb; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        
-        /* Navbar & Header */
-        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        
-        .container { max-width: 500px; margin: auto; padding: 15px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>খামারি বন্ধু PRO</title>
+<style>
+  :root {
+    --green:   #16a34a;
+    --green-l: #22c55e;
+    --blue:    #2563eb;
+    --blue-l:  #3b82f6;
+    --purple:  #7c3aed;
+    --purple-l:#8b5cf6;
+    --orange:  #d97706;
+    --orange-l:#f59e0b;
+    --slate:   #475569;
+    --slate-l: #64748b;
+    --bg:      #f1f5f9;
+    --card:    #ffffff;
+    --border:  #e2e8f0;
+    --text:    #0f172a;
+    --muted:   #64748b;
+    --radius:  16px;
+    --shadow:  0 4px 24px rgba(0,0,0,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-        /* Dashboard Card */
-        .dashboard { background: white; border-radius: 20px; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: -30px; }
-        .stat-card { padding: 15px; border-radius: 15px; text-align: center; color: white; }
-        .bg-blue { background: var(--primary); }
-        .bg-green { background: var(--success); }
-        
-        /* Menu Buttons */
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .menu-btn { background: white; border: 1px solid #e2e8f0; padding: 20px 10px; border-radius: 15px; cursor: pointer; text-align: center; transition: 0.3s; font-weight: bold; }
-        .menu-btn:hover { background: #f1f5f9; transform: translateY(-3px); }
+  /* TICKER */
+  .ticker { background: #0f172a; color: #fbbf24; font-weight: 700; font-size: 13px; padding: 9px 0; overflow: hidden; position: sticky; top: 0; z-index: 999; border-bottom: 2px solid #fbbf24; }
+  .ticker-inner { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll 18s linear infinite; }
+  @keyframes scroll { to { transform: translateX(-100%); } }
 
-        /* Forms & Inputs */
-        .card { background: white; padding: 20px; border-radius: 20px; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .input-group { margin-bottom: 15px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; margin-top: 5px; box-sizing: border-box; }
-        
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-save { background: var(--success); color: white; }
-        .btn-back { background: #64748b; color: white; }
+  .shell { max-width: 480px; margin: 0 auto; padding: 20px 16px 40px; }
 
-        .hidden { display: none; }
-        .list-item { background: #f1f5f9; padding: 10px; border-radius: 10px; margin-bottom: 5px; font-size: 14px; }
-    </style>
+  /* HEADER */
+  .app-header { text-align: center; margin-bottom: 28px; }
+  .app-header .logo { font-size: 32px; font-weight: 800; color: var(--green); letter-spacing: -1px; }
+  .app-header .logo span { color: var(--blue); font-size: 18px; vertical-align: super; }
+  .app-header p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* MENU GRID */
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .menu-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 16px; cursor: pointer; text-align: center; transition: transform 0.15s, box-shadow 0.15s; box-shadow: var(--shadow); }
+  .menu-card:active { transform: scale(0.97); }
+  .menu-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+  .menu-card .icon { font-size: 36px; display: block; margin-bottom: 10px; }
+  .menu-card .label { font-weight: 700; font-size: 14px; }
+  .menu-card .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .mc-green  { border-top: 4px solid var(--green); }
+  .mc-blue   { border-top: 4px solid var(--blue); }
+  .mc-purple { border-top: 4px solid var(--purple); }
+  .mc-orange { border-top: 4px solid var(--orange); }
+  .mc-slate  { border-top: 4px solid var(--slate); grid-column: span 2; }
+
+  /* SECTION HEADER */
+  .sec-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .back-btn { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--slate); flex-shrink: 0; }
+  .sec-header h3 { font-size: 20px; font-weight: 700; }
+
+  /* FORM */
+  .form-card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin: 14px 0 6px; }
+  input, select, textarea { width: 100%; padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: border 0.2s, box-shadow 0.2s; background: #f8fafc; color: var(--text); }
+  input:focus, select:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); background: #fff; }
+  textarea { resize: vertical; }
+  .hidden { display: none !important; }
+
+  /* BUTTONS */
+  .btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 15px 20px; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.15s; margin-top: 12px; }
+  .btn:active { transform: scale(0.98); }
+  .btn-green  { background: linear-gradient(135deg, var(--green), var(--green-l)); color: white; }
+  .btn-blue   { background: linear-gradient(135deg, var(--blue), var(--blue-l)); color: white; }
+  .btn-purple { background: linear-gradient(135deg, var(--purple), var(--purple-l)); color: white; }
+  .btn-orange { background: linear-gradient(135deg, var(--orange), var(--orange-l)); color: white; }
+  .btn-slate  { background: linear-gradient(135deg, var(--slate), var(--slate-l)); color: white; }
+
+  /* ANIMAL ITEM */
+  .animal-item { background: white; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); transition: box-shadow 0.15s; }
+  .animal-item:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .animal-item .aname { font-weight: 700; font-size: 16px; }
+  .animal-item .ameta { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  /* RECORD CARD */
+  .rec-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; font-size: 14px; }
+  .rec-card img { width: 100%; border-radius: 10px; margin-top: 10px; }
+  .rtag { display: inline-block; background: var(--green); color: white; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-bottom: 6px; }
+
+  /* EXPENSE ROW */
+  .exp-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #f8fafc; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); font-size: 14px; }
+  .exp-del { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 16px; padding: 4px 8px; }
+
+  /* SUMMARY */
+  .summary-card { border-radius: var(--radius); padding: 20px; margin-bottom: 14px; color: white; }
+  .summary-card.profit  { background: linear-gradient(135deg, var(--green), var(--green-l)); }
+  .summary-card.loss    { background: linear-gradient(135deg, #ef4444, #dc2626); }
+  .summary-card.neutral { background: linear-gradient(135deg, var(--slate), var(--slate-l)); }
+  .summary-card .s-label { font-size: 13px; opacity: 0.85; font-weight: 600; }
+  .summary-card .s-val   { font-size: 28px; font-weight: 800; margin-top: 4px; }
+  .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mini-stat { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
+  .mini-stat .ms-label { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .mini-stat .ms-val   { font-size: 20px; font-weight: 800; color: var(--text); margin-top: 4px; }
+
+  /* REMINDERS */
+  .rem-item { display: flex; align-items: center; gap: 12px; background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .r-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--orange); flex-shrink: 0; cursor: pointer; }
+  .rem-item.done .r-dot { background: var(--green); }
+  .r-text { flex: 1; font-size: 14px; }
+  .r-date  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .rem-del { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 16px; padding: 4px; }
+
+  /* TOAST */
+  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: #0f172a; color: white; padding: 12px 24px; border-radius: 40px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 32px rgba(0,0,0,0.25); z-index: 9999; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); white-space: nowrap; }
+  #toast.show    { transform: translateX(-50%) translateY(0); }
+  #toast.success { background: var(--green); }
+  #toast.error   { background: #ef4444; }
+
+  #imgPrev { width: 100%; border-radius: 12px; margin-top: 12px; border: 2px dashed #cbd5e1; }
+  .divider { height: 1px; background: var(--border); margin: 18px 0; }
+  .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+  .empty .e-icon { font-size: 48px; display: block; margin-bottom: 10px; }
+  .empty p { font-size: 14px; }
+</style>
 </head>
 <body>
 
-<div class="header">
-    <h2>খামারি বন্ধু PRO</h2>
-    <p>আপনার খামারের ডিজিটাল হিসাবরক্ষক</p>
-</div>
+<div class="ticker"><span class="ticker-inner" id="tickerText">খামারি বন্ধু PRO — আপনার স্মার্ট খামার ব্যবস্থাপনা অ্যাপ 🐄🐐🐔</span></div>
+<div id="toast"></div>
 
-<div class="container" id="app">
-    <div id="homePage">
-        <div class="dashboard">
-            <div class="stat-card bg-blue">
-                <small>মোট খরচ</small>
-                <div id="totalExpense">৳ ০</div>
-            </div>
-            <div class="stat-card bg-green">
-                <small>মোট বিক্রি</small>
-                <div id="totalSales">৳ ০</div>
-            </div>
-        </div>
+<div class="shell" id="app">
 
-        <div class="menu-grid">
-            <div class="menu-btn" onclick="showPage('expensePage')">💸 খরচ যোগ</div>
-            <div class="menu-btn" onclick="showPage('salePage')">💰 বিক্রি যোগ</div>
-            <div class="menu-btn" onclick="showPage('animalPage')">🐂 প্রাণী তালিকা</div>
-            <div class="menu-btn" onclick="showPage('reportPage')">📊 রিপোর্ট</div>
-        </div>
+  <!-- হোম -->
+  <div id="pg-home">
+    <div class="app-header">
+      <div class="logo">খামারি বন্ধু <span>PRO</span></div>
+      <p>আপনার স্মার্ট খামার সহকারী</p>
     </div>
-
-    <div id="expensePage" class="hidden">
-        <div class="card">
-            <h3>খরচের হিসাব যোগ করুন</h3>
-            <div class="input-group">
-                <input type="text" id="expName" placeholder="খরচের বিবরণ (যেমন: খাবার)">
-                <input type="number" id="expAmount" placeholder="টাকার পরিমাণ">
-            </div>
-            <button class="btn btn-save" onclick="saveData('expense')">সেভ করুন</button>
-            <button class="btn btn-back" onclick="showPage('homePage')">ফিরে যান</button>
-        </div>
+    <div class="menu-grid">
+      <div class="menu-card mc-green" onclick="go('pg-add')">
+        <span class="icon">➕</span>
+        <div class="label">নতুন প্রাণী</div>
+        <div class="sub">যোগ করুন</div>
+      </div>
+      <div class="menu-card mc-purple" onclick="openSelect('photo')">
+        <span class="icon">📸</span>
+        <div class="label">ছবি ও ওজন</div>
+        <div class="sub">আপডেট করুন</div>
+      </div>
+      <div class="menu-card mc-blue" onclick="openSelect('expense')">
+        <span class="icon">💰</span>
+        <div class="label">খরচের হিসাব</div>
+        <div class="sub">দৈনিক খরচ</div>
+      </div>
+      <div class="menu-card mc-orange" onclick="openSelect('sell')">
+        <span class="icon">📊</span>
+        <div class="label">বিক্রয় ও লাভ</div>
+        <div class="sub">পরিসংখ্যান</div>
+      </div>
+      <div class="menu-card mc-slate" onclick="go('pg-rem'); renderRems();">
+        <span class="icon">🔔</span>
+        <div class="label">রিমাইন্ডার ও নোট</div>
+        <div class="sub">গুরুত্বপূর্ণ কাজ মনে রাখুন</div>
+      </div>
     </div>
+  </div>
 
-    <div id="salePage" class="hidden">
-        <div class="card">
-            <h3>বিক্রির হিসাব যোগ করুন</h3>
-            <div class="input-group">
-                <input type="text" id="saleName" placeholder="কি বিক্রি করলেন?">
-                <input type="number" id="saleAmount" placeholder="বিক্রয় মূল্য">
-            </div>
-            <button class="btn btn-save" onclick="saveData('sale')">সেভ করুন</button>
-            <button class="btn btn-back" onclick="showPage('homePage')">ফিরে যান</button>
-        </div>
+  <!-- নতুন প্রাণী -->
+  <div id="pg-add" class="hidden">
+    <div class="sec-header">
+      <button class="back-btn" onclick="go('pg-home')">←</button>
+      <h3>নতুন প্রাণী যোগ</h3>
     </div>
+    <div class="form-card">
+      <label>প্রাণীর ধরণ</label>
+      <select id="aType" onchange="checkOther()">
+        <option value="গরু 🐄">গরু (Cow) 🐄</option>
+        <option value="ছাগল 🐐">ছাগল (Goat) 🐐</option>
+        <option value="মুরগি 🐔">মুরগি (Hen) 🐔</option>
+        <option value="Others">অন্যান্য (Others)</option>
+      </select>
+      <input type="text" id="aTypeCustom" class="hidden" placeholder="প্রাণীর নাম লিখুন" style="margin-top:10px;">
+      <label>কেনার দাম (টাকা)</label>
+      <input type="number" id="aPrice" placeholder="যেমন: ৫০০০" min="1">
+      <label>কেনার তারিখ</label>
+      <input type="date" id="aDate">
+      <label>প্রাথমিক ওজন কেজিতে (ঐচ্ছিক)</label>
+      <input type="number" id="aWeight" placeholder="যেমন: ৩০" min="0">
+      <button class="btn btn-green" style="margin-top:20px;" onclick="saveAnimal()">সেভ করুন <span>✔</span></button>
+    </div>
+  </div>
 
-    <div id="reportPage" class="hidden">
-        <div class="card">
-            <h3>আয়-ব্যয় রিপোর্ট</h3>
-            <div id="historyList"></div>
-            <hr>
-            <button class="btn btn-back" onclick="showPage('homePage')">ফিরে যান</button>
-            <button class="btn" style="background:var(--danger); color:white;" onclick="clearData()">সব মুছুন</button>
-        </div>
+  <!-- প্রাণী বাছাই -->
+  <div id="pg-select" class="hidden">
+    <div class="sec-header">
+      <button class="back-btn" onclick="go('pg-home')">←</button>
+      <h3 id="selectTitle">প্রাণী বেছে নিন</h3>
     </div>
+    <div id="selectList"></div>
+  </div>
+
+  <!-- ছবি ও ওজন -->
+  <div id="pg-photo" class="hidden">
+    <div class="sec-header">
+      <button class="back-btn" onclick="openSelect('photo')">←</button>
+      <h3 id="photoTitle">আপডেট</h3>
+    </div>
+    <div class="form-card">
+      <label>তারিখ</label>
+      <input type="date" id="upDate">
+      <label>ওজন (কেজি)</label>
+      <input type="number" id="upWeight" placeholder="যেমন: ৮০" min="0">
+      <label>ছবি তুলুন (ঐচ্ছিক)</label>
+      <input type="file" id="upImg" accept="image/*" capture="camera" onchange="previewImg()">
+      <img id="imgPrev" class="hidden">
+      <label>বিশেষ নোট</label>
+      <textarea id="upNote" rows="3" placeholder="কেমন দেখছেন আজ?"></textarea>
+      <button class="btn btn-purple" style="margin-top:16px;" onclick="saveRecord()">আপডেট সেভ করুন <span>💾</span></button>
+    </div>
+    <div class="divider"></div>
+    <h4 style="font-size:15px; margin-bottom:12px; color:var(--muted);">আগের আপডেটসমূহ</h4>
+    <div id="recordList"></div>
+  </div>
+
+  <!-- খরচ -->
+  <div id="pg-expense" class="hidden">
+    <div class="sec-header">
+      <button class="back-btn" onclick="openSelect('expense')">←</button>
+      <h3 id="expTitle">খরচের হিসাব</h3>
+    </div>
+    <div class="form-card">
+      <label>তারিখ</label>
+      <input type="date" id="expDate">
+      <label>খরচের বিবরণ</label>
+      <input type="text" id="expDesc" placeholder="যেমন: খাবার, ওষুধ">
+      <label>পরিমাণ (টাকা)</label>
+      <input type="number" id="expAmt" placeholder="যেমন: ৩০০" min="1">
+      <button class="btn btn-blue" style="margin-top:16px;" onclick="saveExpense()">খরচ যোগ করুন <span>+</span></button>
+    </div>
+    <div class="divider"></div>
+    <div id="expList"></div>
+  </div>
+
+  <!-- বিক্রয় ও লাভ -->
+  <div id="pg-sell" class="hidden">
+    <div class="sec-header">
+      <button class="back-btn" onclick="openSelect('sell')">←</button>
+      <h3 id="sellTitle">বিক্রয় ও লাভ</h3>
+    </div>
+    <div id="sellSummary"></div>
+    <div class="form-card">
+      <label>বিক্রয় মূল্য (টাকা)</label>
+      <input type="number" id="sellAmt" placeholder="যেমন: ৭০০০" min="1">
+      <label>বিক্রয়ের তারিখ</label>
+      <input type="date" id="sellDate">
+      <label>ক্রেতার নাম (ঐচ্ছিক)</label>
+      <input type="text" id="buyerName" placeholder="যেমন: করিম সাহেব">
+      <button class="btn btn-orange" style="margin-top:16px;" onclick="saveSell()">বিক্রয় নিশ্চিত করুন <span>🤝</span></button>
+    </div>
+    <div class="divider"></div>
+    <div id="sellHistory"></div>
+  </div>
+
+  <!-- রিমাইন্ডার -->
+  <div id="pg-rem" class="hidden">
+    <div class="sec-header">
+      <button class="back-btn" onclick="go('pg-home')">←</button>
+      <h3>রিমাইন্ডার ও নোট</h3>
+    </div>
+    <div class="form-card">
+      <label>কাজের বিবরণ</label>
+      <input type="text" id="remTask" placeholder="যেমন: ভ্যাকসিন দিন">
+      <label>তারিখ</label>
+      <input type="date" id="remDate">
+      <button class="btn btn-slate" style="margin-top:16px;" onclick="saveRem()">রিমাইন্ডার যোগ করুন <span>🔔</span></button>
+    </div>
+    <div class="divider"></div>
+    <div id="remList"></div>
+  </div>
+
 </div>
 
 <script>
-    // Load data on start
-    document.addEventListener('DOMContentLoaded', updateDashboard);
+/* ── ডেটা ── */
+let DB = JSON.parse(localStorage.getItem('khamarPro_v2')) || { animals: [], rems: [] };
+let cIdx = null;
+let selMode = '';
 
-    function showPage(id) {
-        document.querySelectorAll('#app > div').forEach(div => div.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-        if(id === 'reportPage') showHistory();
-    }
+const sync     = () => localStorage.setItem('khamarPro_v2', JSON.stringify(DB));
+const today    = () => new Date().toISOString().split('T')[0];
+const fmt      = n  => Number(n).toLocaleString('bn-BD');
+const isPos    = v  => v && parseFloat(v) > 0;
+const notEmpty = v  => v && v.trim() !== '';
 
-    function saveData(type) {
-        const name = type === 'expense' ? document.getElementById('expName').value : document.getElementById('saleName').value;
-        const amount = type === 'expense' ? document.getElementById('expAmount').value : document.getElementById('saleAmount').value;
+/* ── টোস্ট নোটিফিকেশন ── */
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+  el.className = `show ${type}`;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.className = ''; }, 2800);
+}
 
-        if(!name || !amount) { alert("সব তথ্য দিন"); return; }
+/* ── পেজ নেভিগেশন ── */
+function go(pageId) {
+  document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden'));
+  document.getElementById(pageId).classList.remove('hidden');
+  updateTicker();
+  window.scrollTo(0, 0);
+}
 
-        const record = { name, amount: parseFloat(amount), type, date: new Date().toLocaleDateString() };
-        let data = JSON.parse(localStorage.getItem('farmData')) || [];
-        data.push(record);
-        localStorage.setItem('farmData', JSON.stringify(data));
+/* ── নতুন প্রাণী ── */
+function checkOther() {
+  document.getElementById('aTypeCustom').classList.toggle('hidden', document.getElementById('aType').value !== 'Others');
+}
 
-        alert("সফলভাবে সেভ হয়েছে!");
-        location.reload(); 
-    }
+function saveAnimal() {
+  let type = document.getElementById('aType').value;
+  if (type === 'Others') {
+    type = document.getElementById('aTypeCustom').value.trim();
+    if (!notEmpty(type)) return toast('প্রাণীর নাম লিখুন', 'error');
+  }
+  const price  = parseFloat(document.getElementById('aPrice').value);
+  const date   = document.getElementById('aDate').value;
+  const weight = parseFloat(document.getElementById('aWeight').value) || null;
 
-    function updateDashboard() {
-        let data = JSON.parse(localStorage.getItem('farmData')) || [];
-        let exp = 0, sale = 0;
-        data.forEach(item => {
-            if(item.type === 'expense') exp += item.amount;
-            else sale += item.amount;
-        });
-        document.getElementById('totalExpense').innerText = "৳ " + exp;
-        document.getElementById('totalSales').innerText = "৳ " + sale;
-    }
+  if (!isPos(price)) return toast('সঠিক কেনার দাম দিন — শূন্য বা নেগেটিভ হবে না', 'error');
+  if (!date)         return toast('কেনার তারিখ দিন', 'error');
 
-    function showHistory() {
-        let data = JSON.parse(localStorage.getItem('farmData')) || [];
-        const list = document.getElementById('historyList');
-        list.innerHTML = data.map(item => `
-            <div class="list-item" style="border-left: 5px solid ${item.type === 'expense' ? '#ef4444' : '#10b981'}">
-                <strong>${item.name}</strong> - ৳${item.amount} <br>
-                <small>${item.date} (${item.type === 'expense' ? 'খরচ' : 'বিক্রি'})</small>
-            </div>
-        `).join('');
-    }
+  const seq = DB.animals.filter(a => a.type === type).length + 1;
+  DB.animals.push({
+    id:      Date.now(),
+    idName:  `${type} #${seq}`,
+    type,    price,   date,
+    sold:    null,
+    exps:    [],
+    records: weight ? [{ d: date, w: weight, n: 'প্রাথমিক ওজন', img: '' }] : []
+  });
+  sync();
+  toast('নতুন প্রাণী সেভ হয়েছে!');
+  ['aPrice','aDate','aWeight'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('aTypeCustom').value = '';
+  go('pg-home');
+}
 
-    function clearData() {
-        if(confirm("আপনি কি সব তথ্য মুছে ফেলতে চান?")) {
-            localStorage.clear();
-            location.reload();
-        }
-    }
+/* ── প্রাণী বাছাই ── */
+function openSelect(mode) {
+  selMode = mode;
+  const titles = { photo: 'ছবি ও ওজন আপডেট', expense: 'খরচের হিসাব', sell: 'বিক্রয় ও লাভ' };
+  document.getElementById('selectTitle').textContent = titles[mode];
+  const list = document.getElementById('selectList');
+  if (!DB.animals.length) {
+    list.innerHTML = `<div class="empty"><span class="e-icon">🐄</span><p>এখনো কোনো প্রাণী যোগ করা হয়নি।</p></div>`;
+  } else {
+    list.innerHTML = DB.animals.map((a, i) => `
+      <div class="animal-item" onclick="openAnimal(${i})">
+        <div>
+          <div class="aname">${a.idName}</div>
+          <div class="ameta">কেনা: ৳${fmt(a.price)} • ${a.date}${a.sold ? ' • <span style="color:#ef4444;font-weight:700;">বিক্রিত</span>' : ''}</div>
+        </div>
+        <span style="font-size:20px; color:var(--muted);">›</span>
+      </div>`).join('');
+  }
+  go('pg-select');
+}
+
+function openAnimal(i) {
+  cIdx = i;
+  const a = DB.animals[i];
+  if (selMode === 'photo')   openPhotoPage(a);
+  if (selMode === 'expense') openExpensePage(a);
+  if (selMode === 'sell')    openSellPage(a);
+}
+
+/* ── ছবি ও ওজন ── */
+function openPhotoPage(a) {
+  document.getElementById('photoTitle').textContent = a.idName + ' — আপডেট';
+  document.getElementById('upDate').value   = today();
+  document.getElementById('upWeight').value = '';
+  document.getElementById('upNote').value   = '';
+  document.getElementById('imgPrev').classList.add('hidden');
+  document.getElementById('upImg').value    = '';
+  renderRecords();
+  go('pg-photo');
+}
+
+function previewImg() {
+  const file = document.getElementById('upImg').files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const img = document.getElementById('imgPrev');
+    img.src = e.target.result;
+    img.classList.remove('hidden');
+  };
+  r.readAsDataURL(file);
+}
+
+function saveRecord() {
+  const d   = document.getElementById('upDate').value;
+  const w   = parseFloat(document.getElementById('upWeight').value);
+  const n   = document.getElementById('upNote').value.trim();
+  const img = document.getElementById('imgPrev').classList.contains('hidden') ? '' : document.getElementById('imgPrev').src;
+
+  if (!d)           return toast('তারিখ দিন', 'error');
+  if (!w || w <= 0) return toast('সঠিক ওজন দিন — শূন্য বা নেগেটিভ হবে না', 'error');
+
+  DB.animals[cIdx].records.unshift({ d, w, n, img });
+  sync();
+  toast('আপডেট সেভ হয়েছে!');
+  document.getElementById('upWeight').value = '';
+  document.getElementById('upNote').value   = '';
+  document.getElementById('imgPrev').classList.add('hidden');
+  document.getElementById('upImg').value    = '';
+  renderRecords();
+}
+
+function renderRecords() {
+  const recs = DB.animals[cIdx].records;
+  document.getElementById('recordList').innerHTML = recs.length
+    ? recs.map(r => `
+        <div class="rec-card">
+          <span class="rtag">📅 ${r.d}</span>
+          <div><b>⚖️ ${r.w} কেজি</b></div>
+          ${r.n ? `<div style="margin-top:5px;color:var(--muted);">📝 ${r.n}</div>` : ''}
+          ${r.img ? `<img src="${r.img}" alt="ছবি">` : ''}
+        </div>`).join('')
+    : '<div class="empty"><span class="e-icon">📋</span><p>এখনো কোনো আপডেট নেই।</p></div>';
+}
+
+/* ── খরচ ── */
+function openExpensePage(a) {
+  document.getElementById('expTitle').textContent = a.idName + ' — খরচ';
+  document.getElementById('expDate').value = today();
+  document.getElementById('expDesc').value = '';
+  document.getElementById('expAmt').value  = '';
+  renderExpenses();
+  go('pg-expense');
+}
+
+function saveExpense() {
+  const d    = document.getElementById('expDate').value;
+  const desc = document.getElementById('expDesc').value.trim();
+  const amt  = parseFloat(document.getElementById('expAmt').value);
+
+  if (!d)              return toast('তারিখ দিন', 'error');
+  if (!notEmpty(desc)) return toast('বিবরণ লিখুন', 'error');
+  if (!isPos(amt))     return toast('সঠিক পরিমাণ দিন — শূন্য বা নেগেটিভ হবে না', 'error');
+
+  DB.animals[cIdx].exps.unshift({ d, desc, amt });
+  sync();
+  toast('খরচ যোগ হয়েছে!');
+  document.getElementById('expDesc').value = '';
+  document.getElementById('expAmt').value  = '';
+  renderExpenses();
+}
+
+function deleteExpense(i) {
+  if (!confirm('এই খরচ মুছে ফেলবেন?')) return;
+  DB.animals[cIdx].exps.splice(i, 1);
+  sync();
+  toast('মুছে ফেলা হয়েছে');
+  renderExpenses();
+}
+
+function renderExpenses() {
+  const exps  = DB.animals[cIdx].exps;
+  const total = exps.reduce((s, e) => s + e.amt, 0);
+  const el    = document.getElementById('expList');
+  if (!exps.length) {
+    el.innerHTML = '<div class="empty"><span class="e-icon">💰</span><p>কোনো খরচ নেই।</p></div>';
+    return;
+  }
+  el.innerHTML =
+    `<div class="mini-stat" style="margin-bottom:12px;">
+       <div class="ms-label">মোট খরচ</div>
+       <div class="ms-val" style="color:var(--blue)">৳${fmt(total)}</div>
+     </div>` +
+    exps.map((e, i) => `
+      <div class="exp-row">
+        <div>
+          <div style="font-weight:600;">${e.desc}</div>
+          <div style="font-size:12px;color:var(--muted);">${e.d}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-weight:700;color:var(--blue);">৳${fmt(e.amt)}</span>
+          <button class="exp-del" onclick="deleteExpense(${i})">🗑</button>
+        </div>
+      </div>`).join('');
+}
+
+/* ── বিক্রয় ও লাভ/ক্ষতি ── */
+function openSellPage(a) {
+  document.getElementById('sellTitle').textContent = a.idName + ' — বিক্রয় ও লাভ';
+  document.getElementById('sellDate').value  = today();
+  document.getElementById('sellAmt').value   = '';
+  document.getElementById('buyerName').value = '';
+  renderSellPage(a);
+  go('pg-sell');
+}
+
+function saveSell() {
+  const a    = DB.animals[cIdx];
+  const amt  = parseFloat(document.getElementById('sellAmt').value);
+  const date = document.getElementById('sellDate').value;
+  const buyer= document.getElementById('buyerName').value.trim();
+
+  if (!isPos(amt)) return toast('সঠিক বিক্রয় মূল্য দিন', 'error');
+  if (!date)       return toast('তারিখ দিন', 'error');
+
+  if (!a.sold) {
+    a.sold = { amt, date, buyer };
+  } else {
+    a.sold.history = a.sold.history || [];
+    a.sold.history.push({ amt: a.sold.amt, date: a.sold.date, buyer: a.sold.buyer });
+    a.sold.amt = amt; a.sold.date = date; a.sold.buyer = buyer;
+  }
+  sync();
+  toast('বিক্রয় নিবন্ধিত হয়েছে!');
+  renderSellPage(a);
+}
+
+function renderSellPage(a) {
+  const totalExp  = a.exps.reduce((s, e) => s + e.amt, 0);
+  const totalCost = a.price + totalExp;
+  const sellAmt   = a.sold ? a.sold.amt : 0;
+  const pl        = sellAmt - totalCost;
+  const roi       = totalCost > 0 && sellAmt > 0 ? ((pl / totalCost) * 100).toFixed(1) : null;
+
+  let html = `
+    <div class="summary-row" style="margin-bottom:12px;">
+      <div class="mini-stat">
+        <div class="ms-label">কেনার দাম</div>
+        <div class="ms-val">৳${fmt(a.price)}</div>
+      </div>
+      <div class="mini-stat">
+        <div class="ms-label">পরিচালনা খরচ</div>
+        <div class="ms-val" style="color:var(--blue)">৳${fmt(totalExp)}</div>
+      </div>
+    </div>
+    <div class="mini-stat" style="margin-bottom:12px;text-align:center;">
+      <div class="ms-label">মোট বিনিয়োগ (কেনা + খরচ)</div>
+      <div class="ms-val" style="color:var(--slate)">৳${fmt(totalCost)}</div>
+    </div>`;
+
+  if (a.sold) {
+    html += `
+      <div class="summary-card ${pl >= 0 ? 'profit' : 'loss'}">
+        <div class="s-label">${pl >= 0 ? '✅ মোট লাভ' : '❌ মোট লোকসান'}</div>
+        <div class="s-val">৳${fmt(Math.abs(pl))}</div>
+        <div style="font-size:12px;margin-top:6px;opacity:0.85;">
+          বিক্রয়: ৳${fmt(sellAmt)}${roi ? `  •  ROI: ${roi}%` : ''}
+          <br>${a.sold.date}${a.sold.buyer ? ' • ' + a.sold.buyer : ''}
+        </div>
+      </div>`;
+  } else {
+    html += `<div class="summary-card neutral"><div class="s-label">এখনো বিক্রি হয়নি</div><div class="s-val" style="font-size:20px;">৳${fmt(totalCost)} বিনিয়োগ আছে</div></div>`;
+  }
+
+  document.getElementById('sellSummary').innerHTML = html;
+  const hist = a.sold?.history || [];
+  document.getElementById('sellHistory').innerHTML = hist.length
+    ? `<h4 style="font-size:14px;color:var(--muted);margin-bottom:10px;">আগের বিক্রয় রেকর্ড</h4>` +
+      hist.map(h => `<div class="rec-card">💰 ৳${fmt(h.amt)} — ${h.date}${h.buyer ? ' (' + h.buyer + ')' : ''}</div>`).join('')
+    : '';
+}
+
+/* ── রিমাইন্ডার ── */
+function saveRem() {
+  const task = document.getElementById('remTask').value.trim();
+  const date = document.getElementById('remDate').value;
+  if (!notEmpty(task)) return toast('কাজের বিবরণ লিখুন', 'error');
+  if (!date)           return toast('তারিখ দিন', 'error');
+  DB.rems.unshift({ id: Date.now(), task, date, done: false });
+  sync();
+  toast('রিমাইন্ডার যোগ হয়েছে!');
+  document.getElementById('remTask').value = '';
+  renderRems();
+}
+
+function toggleRem(id) {
+  const r = DB.rems.find(r => r.id === id);
+  if (r) { r.done = !r.done; sync(); renderRems(); updateTicker(); }
+}
+
+function deleteRem(id) {
+  DB.rems = DB.rems.filter(r => r.id !== id);
+  sync();
+  toast('রিমাইন্ডার মুছে ফেলা হয়েছে');
+  renderRems(); updateTicker();
+}
+
+function renderRems() {
+  const el = document.getElementById('remList');
+  if (!DB.rems.length) {
+    el.innerHTML = '<div class="empty"><span class="e-icon">🔔</span><p>কোনো রিমাইন্ডার নেই।</p></div>';
+    return;
+  }
+  el.innerHTML = [...DB.rems]
+    .sort((a, b) => a.done - b.done || a.date.localeCompare(b.date))
+    .map(r => `
+      <div class="rem-item ${r.done ? 'done' : ''}">
+        <div class="r-dot" onclick="toggleRem(${r.id})" title="সম্পন্ন চিহ্নিত করুন"></div>
+        <div class="r-text">
+          <div style="${r.done ? 'text-decoration:line-through;color:var(--muted);' : ''}">${r.task}</div>
+          <div class="r-date">📅 ${r.date}</div>
+        </div>
+        <button class="rem-del" onclick="deleteRem(${r.id})">🗑</button>
+      </div>`).join('');
+}
+
+/* ── টিকার আপডেট ── */
+function updateTicker() {
+  const due = DB.rems.filter(r => !r.done && r.date === today());
+  document.getElementById('tickerText').textContent = due.length
+    ? '⚠️ আজকের কাজ: ' + due.map(r => r.task).join(' | ') + ' ⚠️'
+    : `খামারি বন্ধু PRO — আপনার স্মার্ট খামার সহকারী 🐄  •  মোট প্রাণী: ${DB.animals.length}`;
+}
+
+window.onload = () => { updateTicker(); go('pg-home'); };
 </script>
 </body>
-                    </html>
+          </html>
